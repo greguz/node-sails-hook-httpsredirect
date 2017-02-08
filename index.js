@@ -11,7 +11,7 @@ var http = require('http');
  * @help http://sailsjs.org/documentation/concepts/extending-sails/hooks/hook-specification
  */
 
-module.exports = function httpsRedirect (sails) {
+module.exports = function httpsredirect (sails) {
 
   return {
 
@@ -26,7 +26,7 @@ module.exports = function httpsRedirect (sails) {
 
     defaults: {
 
-      httpsRedirect: {
+      httpsredirect: {
 
         // disable HTTPS redirect
         disabled: false,
@@ -54,10 +54,10 @@ module.exports = function httpsRedirect (sails) {
     initialize: function(callback) {
 
       // ensure configured HTTPS server (and enabled hook)
-      if (!sails.config.ssl.key || !sails.config.ssl.cert || sails.config.httpsRedirect.disabled) return callback();
+      if (!sails.config.ssl.key || !sails.config.ssl.cert || sails.config.httpsredirect.disabled) return callback();
 
       // handle same port configured for HTTP and HTTPS servers
-      if (sails.config.httpsRedirect.port === sails.config.port) return callback(new Error('HTTP and HTTPS server have same port configured'));
+      if (sails.config.httpsredirect.port === sails.config.port) return callback(new Error('HTTP and HTTPS server have same port configured'));
 
       // handle errors
       try {
@@ -83,7 +83,7 @@ module.exports = function httpsRedirect (sails) {
         });
 
         // start listening
-        server.listen(sails.config.httpsRedirect.port, sails.config.httpsRedirect.hostname);
+        server.listen(sails.config.httpsredirect.port, sails.config.httpsredirect.hostname);
 
         // all done
         callback();
