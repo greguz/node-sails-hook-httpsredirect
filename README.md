@@ -22,11 +22,11 @@ Just install this module and lift your server.
 
 ### Parameters
 
-| Parameter     | Type          | Default       | Description                                 |
-| ------------- | ------------- | ------------- | ------------------------------------------- |
-| disabled      | {Boolean}     | false         | if true, the HTTP server will not start     |
-| hostname      | {String}      | '0.0.0.0'     | HTTP server accepted hostname, default all  |
-| port          | {Number}      | 1337          | HTTP server port                            |
+| Parameter     | Type          | Default       | Description                                                                       |
+| ------------- | ------------- | ------------- | --------------------------------------------------------------------------------- |
+| disabled      | {Boolean}     | false         | if true, the HTTP server will not start                                           |
+| hostname      | {String}      | '0.0.0.0'     | HTTP server accepted hostname, default all                                        |
+| port          | {Number}      | 80 or 1337    | HTTP server port: by default port 80 on production and 1337 on other environments |
 
 ### Runtime
 
@@ -43,13 +43,10 @@ You can customize the settings by creating **config/httpsredirect.js** file.
 
 module.exports.httpsredirect = {
 
-  // force disable
-  disabled: false,
+  // listen only localhost requests
+  hostname: '127.0.0.1',
 
-  // hostname to listen
-  hostname: '10.25.111.23',
-
-  // server port
+  // from port 1234
   port: 1234
 
 };

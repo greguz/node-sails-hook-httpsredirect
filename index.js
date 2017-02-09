@@ -34,8 +34,8 @@ module.exports = function httpsredirect (sails) {
         // listen for all connected hostname
         hostname: '0.0.0.0',
 
-        // port to listen (default sails.js port)
-        port: 1337
+        // port to listen
+        port: undefined
 
       }
 
@@ -51,13 +51,31 @@ module.exports = function httpsredirect (sails) {
      * @help http://sailsjs.org/documentation/concepts/extending-sails/hooks/hook-specification/initialize
      */
 
-    initialize: function(callback) {
+    initialize: function (callback) {
+
+      // handle undefined port
+      if (typeof sails.config.httpsredirect.port !== 'number') {
+
+        // on production env use port 80, on other env use default sails port
+        sails.config.httpsredirect.port = sails.config.environment === 'production' ? 80 : 1337;
+
+      }
 
       // ensure configured HTTPS server (and enabled hook)
-      if (!sails.config.ssl.key || !sails.config.ssl.cert || sails.config.httpsredirect.disabled) return callback();
+      if (!sails.config.ssl.key || !sails.config.ssl.cert || sails.config.httpsredirect.disabled) {
+
+        // do not start any server
+        return callback();
+
+      }
 
       // handle same port configured for HTTP and HTTPS servers
-      if (sails.config.httpsredirect.port === sails.config.port) return callback(new Error('HTTP and HTTPS server have same port configured'));
+      if (sails.config.httpsredirect.port === sails.config.port) {
+
+        // stop server lift
+        return callback(new Error('HTTP and HTTPS server have the same port configured'));
+
+      }
 
       // handle errors
       try {
@@ -83,10 +101,7 @@ module.exports = function httpsredirect (sails) {
         });
 
         // start listening
-        server.listen(sails.config.httpsredirect.port, sails.config.httpsredirect.hostname);
-
-        // all done
-        callback();
+        server.listen(sails.config.httpsredirect.port, sails.config.httpsredirect.hostname, callback);
 
       }
 
