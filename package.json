@@ -4,7 +4,7 @@
   "description": "Sails JS hook to redirect from HTTP to HTTPS",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/.bin/eslint \"*/**.js\" && ./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,11 @@
     "redirect"
   ],
   "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.16.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.2",
+    "eslint-plugin-standard": "^2.0.1",
     "mocha": "^3.2.0",
     "sails": "^0.12.11"
   }
