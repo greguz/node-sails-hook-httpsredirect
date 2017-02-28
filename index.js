@@ -12,6 +12,10 @@ var http = require('http')
 
 module.exports = function httpsredirect (sails) {
 
+  // started HTTP server
+  var server
+
+  // return installable hook
   return {
 
     /**
@@ -78,7 +82,7 @@ module.exports = function httpsredirect (sails) {
       try {
 
         // create web server
-        var server = http.createServer(function (req, res) {
+        server = http.createServer(function (req, res) {
 
           // base target (https protocol + hostname without port)
           var location = 'https://' + req.headers.host.replace(/:.+/, '')
@@ -98,7 +102,23 @@ module.exports = function httpsredirect (sails) {
         })
 
         // start listening
-        server.listen(sails.config.httpsredirect.port, sails.config.httpsredirect.hostname, callback)
+        server.listen(sails.config.httpsredirect.port, sails.config.httpsredirect.hostname, function (err) {
+
+          // handle error
+          if (err) return callback(err)
+
+          // listen for lowering
+          sails.once('lower', function () {
+
+            // close HTTP server
+            server.close()
+
+          })
+
+          // all done
+          callback()
+
+        })
 
       } catch (err) {
 
